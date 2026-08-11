@@ -21,19 +21,42 @@ update commands below — nothing to re-install.
 > the real GitHub path (three places: the install command, the `extraKnownMarketplaces`
 > block, and the push commands at the bottom).
 
-This repo is **private**, so first make sure git can read it:
+**Do not `git clone` this repo.** Claude Code clones and updates it for you — that is what
+makes `/plugin update` work later. Just run the two commands below.
+
+This repo is private, so pick the option that matches how your git is set up.
+
+### If you use SSH keys
+
+Test it first — if this prints your username, you're ready:
 
 ```bash
-gh auth login          # easiest option
-# or: have an SSH key on your GitHub account with access to this repo
+ssh -T git@github.com
 ```
 
-Then, inside Claude Code:
+Then, inside Claude Code, use the **full SSH URL**:
+
+```
+/plugin marketplace add git@github.com:<OWNER>/<REPO>.git
+/plugin install cloudhouse@cloudhouse-skills
+```
+
+### If you use the GitHub CLI / HTTPS
+
+```bash
+gh auth login
+```
+
+Then, inside Claude Code, the short form works:
 
 ```
 /plugin marketplace add <OWNER>/<REPO>
 /plugin install cloudhouse@cloudhouse-skills
 ```
+
+> **Gotcha:** the short `<OWNER>/<REPO>` form resolves to HTTPS. On a private repo it fails
+> unless a credential helper is set up (which `gh auth login` does). If you only have an SSH
+> key and no `gh`, use the full `git@github.com:` URL from the section above.
 
 The install opens a details view where you pick a scope — choose **user** so the skills are
 available in every project, not just the current one.
