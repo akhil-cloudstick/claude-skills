@@ -1,0 +1,16 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "cloudhouse-skills",
+  "owner": {
+    "name": "Cloudhouse Dev",
+    "email": "dev1@cloudstick.io"
+  },
+  "description": "Cloudhouse internal Claude Code skills",
+  "plugins": [
+    {
+      "name": "cloudhouse",
+      "source": "./plugins/cloudhouse",
+      "description": "Cloudhouse engineering standards as skills (Go backend, and more)."
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "cloudhouse",
+  "displayName": "Cloudhouse Standards",
+  "version": "0.1.0",
+  "description": "Cloudhouse engineering standards as skills: Go + Echo backend, and more to come.",
+  "author": {
+    "name": "Cloudhouse Dev",
+    "email": "dev1@cloudstick.io"
+  },
+  "license": "UNLICENSED",
+  "keywords": ["standards", "go", "echo", "backend"]
+}
