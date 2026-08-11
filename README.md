@@ -17,9 +17,9 @@ update commands below — nothing to re-install.
 
 ## Install (once per machine)
 
-> **Maintainer TODO before sharing this repo:** replace every `<OWNER>/<REPO>` below with
-> the real GitHub path (three places: the install command, the `extraKnownMarketplaces`
-> block, and the push commands at the bottom).
+> **Maintainer TODO before sharing this repo:** replace every `<OWNER>/<REPO>` below with the
+> real GitHub path — the two install commands, the `extraKnownMarketplaces` block, and the
+> push command at the bottom.
 
 **Do not `git clone` this repo.** Claude Code clones and updates it for you — that is what
 makes `/plugin update` work later. Just run the two commands below.
