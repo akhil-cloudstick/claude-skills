@@ -17,6 +17,10 @@ update commands below — nothing to re-install.
 
 ## Install (once per machine)
 
+> **Maintainer TODO before sharing this repo:** replace every `<OWNER>/<REPO>` below with
+> the real GitHub path (three places: the install command, the `extraKnownMarketplaces`
+> block, and the push commands at the bottom).
+
 This repo is **private**, so first make sure git can read it:
 
 ```bash
@@ -27,7 +31,7 @@ gh auth login          # easiest option
 Then, inside Claude Code:
 
 ```
-/plugin marketplace add cloudstick/Skills
+/plugin marketplace add <OWNER>/<REPO>
 /plugin install cloudhouse@cloudhouse-skills
 ```
 
@@ -88,7 +92,7 @@ registered centrally in a shared `settings.json` (user, project, or managed scop
     "cloudhouse-skills": {
       "source": {
         "source": "github",
-        "repo": "cloudstick/Skills"
+        "repo": "<OWNER>/<REPO>"
       }
     }
   },
@@ -125,6 +129,19 @@ description: What it covers, and when Claude should reach for it. Invoked as /cl
 
 Then bump the version and push. `marketplace.json` does **not** need to change — skills are
 auto-discovered from the `skills/` directory.
+
+## First push (maintainer, one time)
+
+The repo is already initialized and committed locally on `main`. Create an **empty private**
+repo on GitHub — no README, no .gitignore, no license, or the first push will conflict — then:
+
+```bash
+cd c:\Coudhouse\Skills
+git remote add origin git@github.com:<OWNER>/<REPO>.git    # or the https:// URL
+git push -u origin main
+```
+
+Then replace the three `<OWNER>/<REPO>` placeholders in this README, commit, and push again.
 
 ## Repository layout
 
