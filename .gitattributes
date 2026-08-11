@@ -1,0 +1,3 @@
+# Keep line endings identical on every machine — the standard mandates tabs and
+# consistent formatting, and mixed CRLF/LF turns diffs into whitespace noise.
+* text=auto eol=lf
