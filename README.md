@@ -18,12 +18,22 @@ update commands below — nothing to re-install.
 ## Install (once per machine)
 
 **Do not `git clone` this repo.** Claude Code clones and updates it for you — that is what
-makes `/plugin update` work later. Just run the two commands below, inside Claude Code:
+makes `/plugin update` work later.
+
+Inside Claude Code, run these **one at a time**. Run the first command, wait for
+`✓ Successfully added marketplace: cloudhouse-skills`, then run the second:
 
 ```
-/plugin marketplace add akhil-cloudstick/claude-skills
+/plugin marketplace add https://github.com/akhil-cloudstick/claude-skills.git
+```
+
+```
 /plugin install cloudhouse@cloudhouse-skills
 ```
+
+> **Do not paste both lines together.** `/plugin marketplace add` opens a prompt asking for the
+> marketplace source. If both lines go in at once, the second command is swallowed into that
+> prompt and you get `is not a valid GitHub owner/repo shorthand`. Run them separately.
 
 The repo is public, so no GitHub login or SSH key is needed.
 
