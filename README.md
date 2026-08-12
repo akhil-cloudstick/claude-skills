@@ -17,9 +17,9 @@ update commands below — nothing to re-install.
 
 ## Install (once per machine)
 
-> **Maintainer TODO before sharing this repo:** replace every `<OWNER>/<REPO>` below with the
-> real GitHub path — the two install commands, the `extraKnownMarketplaces` block, and the
-> push command at the bottom.
+> **Maintainer TODO before sharing this repo:** replace every `<OWNER>` below with the GitHub
+> org or username — four places: the two install commands, the `extraKnownMarketplaces` block,
+> and the push command at the bottom.
 
 **Do not `git clone` this repo.** Claude Code clones and updates it for you — that is what
 makes `/plugin update` work later. Just run the two commands below.
@@ -37,7 +37,7 @@ ssh -T git@github.com
 Then, inside Claude Code, use the **full SSH URL**:
 
 ```
-/plugin marketplace add git@github.com:<OWNER>/<REPO>.git
+/plugin marketplace add git@github.com:<OWNER>/claude-skills.git
 /plugin install cloudhouse@cloudhouse-skills
 ```
 
@@ -50,11 +50,11 @@ gh auth login
 Then, inside Claude Code, the short form works:
 
 ```
-/plugin marketplace add <OWNER>/<REPO>
+/plugin marketplace add <OWNER>/claude-skills
 /plugin install cloudhouse@cloudhouse-skills
 ```
 
-> **Gotcha:** the short `<OWNER>/<REPO>` form resolves to HTTPS. On a private repo it fails
+> **Gotcha:** the short `<OWNER>/claude-skills` form resolves to HTTPS. On a private repo it fails
 > unless a credential helper is set up (which `gh auth login` does). If you only have an SSH
 > key and no `gh`, use the full `git@github.com:` URL from the section above.
 
@@ -115,7 +115,7 @@ registered centrally in a shared `settings.json` (user, project, or managed scop
     "cloudhouse-skills": {
       "source": {
         "source": "github",
-        "repo": "<OWNER>/<REPO>"
+        "repo": "<OWNER>/claude-skills"
       }
     }
   },
@@ -146,9 +146,15 @@ Create `plugins/cloudhouse/skills/<new-skill>/SKILL.md` with YAML frontmatter:
 ```markdown
 ---
 name: react-frontend
-description: What it covers, and when Claude should reach for it. Invoked as /cloudhouse:react-frontend.
+description: "What it covers, and when Claude should reach for it. Invoked as /cloudhouse:react-frontend."
 ---
 ```
+
+> **Always wrap `description` in double quotes.** YAML cannot parse a colon-followed-by-space
+> inside an unquoted value, so a description like `Use for ANY work: creating a page` breaks
+> the whole frontmatter. It fails **silently** — the skill still loads, but with no name and no
+> description, so Claude will never pick it up on its own. This has already caught us once.
+> `claude plugin validate --strict` detects it; run it before every push.
 
 Then bump the version and push. `marketplace.json` does **not** need to change — skills are
 auto-discovered from the `skills/` directory.
@@ -160,11 +166,11 @@ repo on GitHub — no README, no .gitignore, no license, or the first push will 
 
 ```bash
 cd c:\Coudhouse\Skills
-git remote add origin git@github.com:<OWNER>/<REPO>.git    # or the https:// URL
+git remote add origin git@github.com:<OWNER>/claude-skills.git    # or the https:// URL
 git push -u origin main
 ```
 
-Then replace the three `<OWNER>/<REPO>` placeholders in this README, commit, and push again.
+Then replace the four `<OWNER>` placeholders in this README, commit, and push again.
 
 ## Repository layout
 
