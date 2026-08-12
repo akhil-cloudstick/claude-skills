@@ -12,6 +12,7 @@ marketplace named `cloudhouse-skills`. This repository **is** the marketplace.
 |---|---|
 | `/cloudhouse:go-backend` | **Go + Echo** backend standard — folder layout, file naming, in-file ordering, handler structure, response envelope, migrations, config. Builds new backends, audits existing ones, and keeps edits compliant. |
 | `/cloudhouse:backend` | **Every other language** — the same standard for NestJS, Express, Laravel, Django, FastAPI, Spring, Rails. Identical folders, file naming, handler sequence, URLs, response envelope and SQL migrations; only the syntax changes. Contains no Go code. |
+| `/cloudhouse:frontend` | **Frontend structure, any framework** — React, Next.js, Vue, Nuxt, Svelte, Angular. Module-wise layout (`modules/<feature>/{pages,components,services,types}`), file naming, in-file ordering, the HTTP client with **one base URL and a dev/prod switch**, and a per-entity service that owns every endpoint path. |
 | `/cloudhouse:role-permission` | **Roles & permissions, backend and frontend in one contract.** Permission tables and seeding, grant defaults, token claims, permission middleware and error shapes, the permissions API — then the frontend store, `can()` helper, route guard, gate component and sidebar filtering, so a page the user can't open is **hidden**, not shown empty. Language and framework neutral. |
 
 ### Which one do I use?
@@ -21,17 +22,24 @@ standard, so a NestJS backend and a Go backend built from these skills end up wi
 folder tree, the same routes, the same database tables and the same JSON on the wire — the
 frontend cannot tell them apart.
 
-Don't run both on one project. If you're unsure, just describe the project and Claude picks
-the right one from the manifest it finds.
+Use `frontend` for the client side, whatever the framework. It mirrors the backend module
+layout on purpose: the same feature has the same name and the same shape on both sides, so
+moving between them means navigating by the same map.
 
-`role-permission` is different — it **stacks on top** of whichever backend skill you're using,
-and it also covers the frontend. Reach for it any time you add a permission, gate an endpoint
-or a page, build the role-permission admin screen, or want an existing setup audited. It works
-on both halves at once because a permission enforced on only one side is the bug that produces
-a visible menu item leading to an empty list.
+Don't run two structure skills on one project. If you're unsure, just describe the project and
+Claude picks the right one from the manifest it finds.
 
-More coming: React frontend and others. When they land you just run the update commands below —
-nothing to re-install.
+`role-permission` is different — it **stacks on top** of the structure skills and covers both
+halves at once. Reach for it any time you add a permission, gate an endpoint or a page, build
+the role-permission admin screen, or want an existing setup audited. It has to work on both
+sides because a permission enforced on only one is the bug that produces a visible menu item
+leading to an empty list.
+
+Every skill has the same three modes — **Build**, **Audit** (reports first, changes nothing
+until you approve) and **Edit** — so `/cloudhouse:frontend review this app` works the same way
+`/cloudhouse:go-backend review this backend` does.
+
+More coming. When they land you just run the update commands below — nothing to re-install.
 
 ## Install (once per machine)
 
@@ -71,13 +79,14 @@ Verify it worked:
 ```
 
 `cloudhouse` should be listed as installed and enabled. Typing `/cloudhouse:` should now
-offer `backend`, `go-backend` and `role-permission`.
+offer `backend`, `frontend`, `go-backend` and `role-permission`.
 
 ## Use
 
 ```
 /cloudhouse:go-backend       # Go + Echo projects
 /cloudhouse:backend          # NestJS, Express, Laravel, Django, FastAPI, Spring, Rails, …
+/cloudhouse:frontend         # React, Next.js, Vue, Nuxt, Svelte, Angular, …
 /cloudhouse:role-permission  # roles & permissions — backend + frontend together
 ```
 
@@ -165,6 +174,7 @@ plugins/cloudhouse/
   .claude-plugin/plugin.json             plugin manifest + version
   skills/
     backend/SKILL.md                     one directory per skill
+    frontend/SKILL.md
     go-backend/SKILL.md
     role-permission/SKILL.md
 ```
