@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "cloudhouse",
   "displayName": "Cloudhouse Standards",
-  "version": "0.2.0",
-  "description": "Cloudhouse engineering standards as skills: the backend structure standard for any language, the Go + Echo backend standard, and more to come.",
+  "version": "0.3.0",
+  "description": "Cloudhouse engineering standards as skills: the backend structure standard for any language, the Go + Echo backend standard, the end-to-end role and permission standard, and more to come.",
   "author": {
     "name": "Cloudhouse Dev",
     "email": "dev1@cloudstick.io"
@@ -12,8 +12,12 @@
   "keywords": [
     "standards",
     "backend",
+    "rbac",
+    "permissions",
+    "auth",
     "go",
     "echo",
+    "react",
     "nestjs",
     "nodejs",
     "laravel",
