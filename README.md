@@ -10,7 +10,18 @@ marketplace named `cloudhouse-skills`. This repository **is** the marketplace.
 
 | Skill | What it does |
 |---|---|
-| `/cloudhouse:go-backend` | Go + Echo backend standard — folder layout, file naming, in-file ordering, handler structure, response envelope, migrations, config. Builds new backends, audits existing ones, and keeps edits compliant. |
+| `/cloudhouse:go-backend` | **Go + Echo** backend standard — folder layout, file naming, in-file ordering, handler structure, response envelope, migrations, config. Builds new backends, audits existing ones, and keeps edits compliant. |
+| `/cloudhouse:backend` | **Every other language** — the same standard for NestJS, Express, Laravel, Django, FastAPI, Spring, Rails. Identical folders, file naming, handler sequence, URLs, response envelope and SQL migrations; only the syntax changes. Contains no Go code. |
+
+### Which one do I use?
+
+Use `go-backend` if the project is Go. Use `backend` for anything else. They are the same
+standard, so a NestJS backend and a Go backend built from these skills end up with the same
+folder tree, the same routes, the same database tables and the same JSON on the wire — the
+frontend cannot tell them apart.
+
+Don't run both on one project. If you're unsure, just describe the project and Claude picks
+the right one from the manifest it finds.
 
 More coming: React frontend, role & permission, and others. When they land you just run the
 update commands below — nothing to re-install.
@@ -53,12 +64,13 @@ Verify it worked:
 ```
 
 `cloudhouse` should be listed as installed and enabled. Typing `/cloudhouse:` should now
-offer `go-backend`.
+offer `backend` and `go-backend`.
 
 ## Use
 
 ```
-/cloudhouse:go-backend
+/cloudhouse:go-backend      # Go + Echo projects
+/cloudhouse:backend         # NestJS, Express, Laravel, Django, FastAPI, Spring, Rails, …
 ```
 
 Say what you want after the command and the skill picks its mode:
@@ -144,5 +156,6 @@ auto-discovered from the `skills/` directory.
 plugins/cloudhouse/
   .claude-plugin/plugin.json             plugin manifest + version
   skills/
-    go-backend/SKILL.md                  one directory per skill
+    backend/SKILL.md                     one directory per skill
+    go-backend/SKILL.md
 ```
