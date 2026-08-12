@@ -17,46 +17,15 @@ update commands below — nothing to re-install.
 
 ## Install (once per machine)
 
-> **Maintainer TODO before sharing this repo:** replace every `<OWNER>` below with the GitHub
-> org or username — four places: the two install commands, the `extraKnownMarketplaces` block,
-> and the push command at the bottom.
-
 **Do not `git clone` this repo.** Claude Code clones and updates it for you — that is what
-makes `/plugin update` work later. Just run the two commands below.
-
-This repo is private, so pick the option that matches how your git is set up.
-
-### If you use SSH keys
-
-Test it first — if this prints your username, you're ready:
-
-```bash
-ssh -T git@github.com
-```
-
-Then, inside Claude Code, use the **full SSH URL**:
+makes `/plugin update` work later. Just run the two commands below, inside Claude Code:
 
 ```
-/plugin marketplace add git@github.com:<OWNER>/claude-skills.git
+/plugin marketplace add akhil-cloudstick/claude-skills
 /plugin install cloudhouse@cloudhouse-skills
 ```
 
-### If you use the GitHub CLI / HTTPS
-
-```bash
-gh auth login
-```
-
-Then, inside Claude Code, the short form works:
-
-```
-/plugin marketplace add <OWNER>/claude-skills
-/plugin install cloudhouse@cloudhouse-skills
-```
-
-> **Gotcha:** the short `<OWNER>/claude-skills` form resolves to HTTPS. On a private repo it fails
-> unless a credential helper is set up (which `gh auth login` does). If you only have an SSH
-> key and no `gh`, use the full `git@github.com:` URL from the section above.
+The repo is public, so no GitHub login or SSH key is needed.
 
 The install opens a details view where you pick a scope — choose **user** so the skills are
 available in every project, not just the current one.
@@ -115,7 +84,7 @@ registered centrally in a shared `settings.json` (user, project, or managed scop
     "cloudhouse-skills": {
       "source": {
         "source": "github",
-        "repo": "<OWNER>/claude-skills"
+        "repo": "akhil-cloudstick/claude-skills"
       }
     }
   },
@@ -125,8 +94,7 @@ registered centrally in a shared `settings.json` (user, project, or managed scop
 }
 ```
 
-With this in place the marketplace is known and the plugin is enabled automatically —
-staff only need git access to the repo.
+With this in place the marketplace is known and the plugin is enabled automatically.
 
 ## Contributing a change
 
@@ -158,19 +126,6 @@ description: "What it covers, and when Claude should reach for it. Invoked as /c
 
 Then bump the version and push. `marketplace.json` does **not** need to change — skills are
 auto-discovered from the `skills/` directory.
-
-## First push (maintainer, one time)
-
-The repo is already initialized and committed locally on `main`. Create an **empty private**
-repo on GitHub — no README, no .gitignore, no license, or the first push will conflict — then:
-
-```bash
-cd c:\Coudhouse\Skills
-git remote add origin git@github.com:<OWNER>/claude-skills.git    # or the https:// URL
-git push -u origin main
-```
-
-Then replace the four `<OWNER>` placeholders in this README, commit, and push again.
 
 ## Repository layout
 
