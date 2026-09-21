@@ -2,8 +2,8 @@
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
   "name": "cloudhouse",
   "displayName": "Cloudhouse Standards",
-  "version": "0.4.0",
-  "description": "Cloudhouse engineering standards as skills: the backend structure standard for any language, the Go + Echo backend standard, the frontend structure standard for any framework, and the end-to-end role and permission standard.",
+  "version": "0.6.0",
+  "description": "Cloudhouse engineering standards as skills: the backend structure standard for any language, the Go + Echo backend standard, the frontend structure standard for any framework, the end-to-end role and permission standard, the desktop application standard for shipping a web app as an Electron or Wails v2 desktop build, and the mobile application standard for converting a mobile-layout design into an Expo app for iOS and Android.",
   "author": {
     "name": "Cloudhouse Dev",
     "email": "dev1@cloudstick.io"
@@ -25,6 +25,16 @@
     "nodejs",
     "laravel",
     "python",
-    "spring"
+    "spring",
+    "desktop",
+    "electron",
+    "wails",
+    "packaging",
+    "auto-update",
+    "mobile",
+    "expo",
+    "react-native",
+    "ios",
+    "android"
   ]
 }

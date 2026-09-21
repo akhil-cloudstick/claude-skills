@@ -159,6 +159,7 @@ do not add one more inline URL to a store slice because that is what the file ne
 - [ ] Types colocated with the module; no backend entity redeclared inline in a page (§12)
 - [ ] Guarded routes agree with the navigation entries (§13, `/cloudhouse:role-permission`)
 - [ ] No dead files, no archives, no editor workspace files in the source tree (§4.3)
+- [ ] No comment longer than one line, and none that restates the code (§5.5)
 - [ ] The project typechecks and builds clean
 
 ---
@@ -589,8 +590,14 @@ Never `xxxHandler`. Never a bare lowercase loader like `getbyid`.
 - **Tabs**, per the house standard — set once in the editor config and the formatter, matching.
 - One blank line between functions and between blocks; **never two in a row**; never a blank
   line right after an opening brace.
-- Comments only where the reason is not visible in the code — a business rule, a workaround, a
-  unit, a warning. Maximum 1–2 lines, never a paragraph.
+- **Comments: 0–1 lines, and mostly none.** The default is to write no comment. Write one only
+  where the reason is genuinely not visible in the code — a business rule, a workaround, a unit, a
+  warning. **One line is the hard maximum.** Never two, never a paragraph, never a block above a
+  function. If a comment needs more than one line, the code needs a better name instead.
+- Comments that restate the code add nothing — delete them. A generated scaffold arrives full of
+  them; strip them rather than inheriting them.
+- The banner comments in §5.2 (`// --- Constants ---`, `// --- Types ---`) are not affected by this
+  rule. They are structural markers, not explanation, and they are one line by construction.
 - **Cross-reference the backend where a value must stay in sync**: a status list that mirrors a
   server-side list gets a one-line comment naming the file it mirrors. This is the single most
   useful comment habit in the reference code and it is required here.
@@ -1131,4 +1138,7 @@ Adding **vendor contracts** to the purchase-orders area.
 | A presentational component reading the store | pass data and callbacks in (§11) |
 | A guarded route whose nav entry has no permission | they must agree (§13) |
 | Logging left in committed code | remove it (§5.5) |
+| A comment longer than one line, or a paragraph above a function | cut it to one line, or delete it (§5.5) |
+| A comment restating what the code already says | delete it — the default is no comment (§5.5) |
+| A generated scaffold's comment blocks left in place | strip them, do not inherit them (§5.5) |
 | Showing the user code from a framework the project does not use | detect the framework first, then stay in it (§0) |
