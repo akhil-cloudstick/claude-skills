@@ -82,13 +82,41 @@ List every project the `tasks` call returned, in the order it returned them, inc
 0 subtasks (say `no subtasks assigned`). If the count you print does not match
 `len(data)`, you have dropped something — print them all.
 
+### Long lists — paginate, never truncate
+
+A list is never cut short. If it is too long to read in one message — more than about **25
+rows** — show it in pages of 25 and let the user walk through them:
+
+```
+Which subtask? (number · n = next page · p = previous · or type part of a name)
+
+Showing 1-25 of 38
+
+   1. 636  Clone, convert & test the UI (Lovable React → Next.js)
+   2. 637  Clone & rebrand the backend, adapted to Thalirtea's data model
+   ...
+  25. 603  Chat Room for Integrated Social Media
+
+  n. Next page (26-38)
+```
+
+Rules for paging:
+
+- The numbering runs across the whole list, not per page — item 26 stays 26 on page 2, so a
+  number the user remembers from an earlier page always works.
+- `n` / `next` and `p` / `prev` move between pages; the header always says `Showing X-Y of N`.
+- The user can answer with a number from **any** page, with the ERP id itself (e.g. `674`), or
+  with part of a name (`flash sale`) — match case-insensitively and, if more than one matches,
+  show just those matches as a short numbered list.
+- Never say "and N more" without offering a way to see them.
+
 If the current repo clearly matches one project, put it first and mark it `(this repo)` — but
 still let the user choose. Never pick for them.
 
 ## 3. Pick the task
 
 Print **every** task under the chosen project as a numbered list and ask for a number. Always
-offer `0` as back.
+offer `0` as back. Paginate at 25 rows as described above rather than shortening the list.
 
 ```
 Signed in: akhil@cloudstick.io · Melusive — Multi-Portal Ecommerce
@@ -103,7 +131,12 @@ Which task? (number, or 0 to pick a different project)
 ## 4. Pick the subtask
 
 Print **every** subtask under the chosen task, numbered. The user may reply with several numbers
-when the day's work spans more than one. `0` goes back to the task list.
+when the day's work spans more than one. `0` goes back to the task list. Paginate at 25 rows;
+never drop rows.
+
+The user can also skip the drill-down entirely by giving a subtask id or a name fragment at any
+point — look it up in the `tasks` tree and confirm which project and task it belongs to before
+continuing.
 
 ```
 Signed in: akhil@cloudstick.io · Melusive → Implement New Client Requested Features
@@ -261,5 +294,6 @@ subtask, task or project — the user often has more than one to log.
 - Never ask for or echo a password in chat; use the login window.
 - Never propose progress without reading the subtask first.
 - One day, one update. One project per run — ask again rather than mixing projects.
+- Never truncate a list. Show every row, paging at 25 if it is long.
 - Show the signed-in email on every prompt.
 - Do not invent work the collector output does not support.
