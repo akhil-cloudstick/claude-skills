@@ -55,98 +55,75 @@ the next `/erp:eod` asks for login again.
 py scripts/erp.py tasks
 ```
 
-**Do not use `AskUserQuestion` for this** — it shows at most 4 options, and the user has more
-projects than that, so choices would silently disappear. Print **every** project as a numbered
-list in your message and ask the user to reply with a number:
+Ask with **`AskUserQuestion`** so the user picks from a selectable list with the arrow keys —
+never make them type a number.
+
+That tool shows **at most 4 options**, so when there are more, put **3 real choices plus a
+4th option that pages to the rest**, and keep asking until something is chosen. Nothing is ever
+dropped from the list.
 
 ```
-Signed in: akhil@cloudstick.io
+Which project?                              (Signed in: akhil@cloudstick.io)
 
-Which project? (reply with the number)
-
-   1. CloudHouse ERP                      2 tasks,  2 subtasks   (this repo)
-   2. Thalirtea                           4 tasks, 12 subtasks
-   3. Shopping App                        3 tasks, 10 subtasks
-   4. Melusive — Multi-Portal Ecommerce   3 tasks,  6 subtasks
-   5. ITS INFRA INDIA                     4 tasks,  6 subtasks
-   6. GST - Training System               1 task,   1 subtask
-   7. KSITL                               1 task,   1 subtask
-   8. Freight Forwarding ERP              1 task,   0 subtasks
+ > CloudHouse ERP           (this repo) — 2 tasks, 2 subtasks
+   Thalirtea                4 tasks, 12 subtasks
+   Shopping App             3 tasks, 10 subtasks
+   More projects (5 of 8 not shown)
 ```
 
-The same rule applies to the task and subtask lists in steps 3 and 4: **always print the whole
-list**, never a truncated one. Only fall back to `AskUserQuestion` when there are genuinely 4 or
-fewer choices, or for yes/no style confirmations.
+Choosing **More** re-asks with the next three, plus `More` again while any remain, and a
+`Back to the start of the list` option once past the first page. Order the first page by what
+the user most likely wants: the project matching the current repo first, then the ones with the
+most assigned subtasks.
 
-List every project the `tasks` call returned, in the order it returned them, including any with
-0 subtasks (say `no subtasks assigned`). If the count you print does not match
-`len(data)`, you have dropped something — print them all.
+Rules for every picker in steps 2, 3 and 4:
 
-### Long lists — paginate, never truncate
-
-A list is never cut short. If it is too long to read in one message — more than about **25
-rows** — show it in pages of 25 and let the user walk through them:
-
-```
-Which subtask? (number · n = next page · p = previous · or type part of a name)
-
-Showing 1-25 of 38
-
-   1. 636  Clone, convert & test the UI (Lovable React → Next.js)
-   2. 637  Clone & rebrand the backend, adapted to Thalirtea's data model
-   ...
-  25. 603  Chat Room for Integrated Social Media
-
-  n. Next page (26-38)
-```
-
-Rules for paging:
-
-- The numbering runs across the whole list, not per page — item 26 stays 26 on page 2, so a
-  number the user remembers from an earlier page always works.
-- `n` / `next` and `p` / `prev` move between pages; the header always says `Showing X-Y of N`.
-- The user can answer with a number from **any** page, with the ERP id itself (e.g. `674`), or
-  with part of a name (`flash sale`) — match case-insensitively and, if more than one matches,
-  show just those matches as a short numbered list.
-- Never say "and N more" without offering a way to see them.
+- **Always `AskUserQuestion`**, never "reply with a number".
+- 4 or fewer items → show them all in one ask, no `More`.
+- More than 4 → 3 items + `More`, repeating until chosen. Say how many are not yet shown.
+- The option label carries the useful detail (ids, counts) so the user does not have to ask.
+- The tool always offers a free-text **Other** box, so the user can type an ERP id (`674`) or
+  part of a name (`flash sale`) instead of paging. Match it case-insensitively; if several
+  match, ask again with just those.
+- Never say "and N more" without a `More` option that reaches them.
 
 If the current repo clearly matches one project, put it first and mark it `(this repo)` — but
 still let the user choose. Never pick for them.
 
 ## 3. Pick the task
 
-Print **every** task under the chosen project as a numbered list and ask for a number. Always
-offer `0` as back. Paginate at 25 rows as described above rather than shortening the list.
+`AskUserQuestion` again, same rules. With 4 or fewer tasks show them all; otherwise 3 plus
+`More tasks`. Always include a way back to the project list.
 
 ```
-Signed in: akhil@cloudstick.io · Melusive — Multi-Portal Ecommerce
+Which task?        (Signed in: akhil@cloudstick.io · Melusive — Multi-Portal Ecommerce)
 
-Which task? (number, or 0 to pick a different project)
-
-   1. 140  Implement New Client Requested Features    3 subtasks
-   2. 118  New Update by Client                       2 subtasks
-   3.  78  Client design mockups                      1 subtask
+ > 140  Implement New Client Requested Features   3 subtasks
+   118  New Update by Client                      2 subtasks
+    78  Client design mockups                     1 subtask
+   ← Back to projects
 ```
+
+When a project has more than 3 tasks, the 4th slot goes to `More tasks (N not shown)` and the
+back option moves onto the last page — never drop the back option entirely.
 
 ## 4. Pick the subtask
 
-Print **every** subtask under the chosen task, numbered. The user may reply with several numbers
-when the day's work spans more than one. `0` goes back to the task list. Paginate at 25 rows;
-never drop rows.
-
-The user can also skip the drill-down entirely by giving a subtask id or a name fragment at any
-point — look it up in the `tasks` tree and confirm which project and task it belongs to before
-continuing.
+`AskUserQuestion` with `multiSelect: true`, so the user can tick more than one subtask when the
+day's work spans several. Same 4-option limit, same `More subtasks` paging.
 
 ```
-Signed in: akhil@cloudstick.io · Melusive → Implement New Client Requested Features
+Which subtask(s)?   (Signed in: akhil@cloudstick.io · Melusive → Implement New Client Requested Features)
 
-Which subtask? (one or more numbers, or 0 to pick a different task)
-
-   1. 674  Create Product Detail Page
-   2. 675  Update Shop & All Category Redirection
-   3. 676  Add Offline Orders Section
+ [x] 674  Create Product Detail Page
+ [ ] 675  Update Shop & All Category Redirection
+ [ ] 676  Add Offline Orders Section
+     ← Back to tasks
 ```
+
+The user can also skip the drill-down entirely by typing a subtask id or a name fragment into
+the free-text box at any level — look it up in the `tasks` tree and confirm which project and
+task it belongs to before continuing.
 
 Back must work at any point before posting — the user can change project or task, and the
 selection below it resets.
@@ -294,6 +271,7 @@ subtask, task or project — the user often has more than one to log.
 - Never ask for or echo a password in chat; use the login window.
 - Never propose progress without reading the subtask first.
 - One day, one update. One project per run — ask again rather than mixing projects.
-- Never truncate a list. Show every row, paging at 25 if it is long.
+- Never make the user type a number to choose. Always a selectable `AskUserQuestion` list, with
+  a `More` option when there are more than 4 items — and never truncate.
 - Show the signed-in email on every prompt.
 - Do not invent work the collector output does not support.
