@@ -55,50 +55,64 @@ the next `/erp:eod` asks for login again.
 py scripts/erp.py tasks
 ```
 
-Show the user's assigned projects with their subtask counts and ask which one, with
-`AskUserQuestion` (single select):
+**Do not use `AskUserQuestion` for this** — it shows at most 4 options, and the user has more
+projects than that, so choices would silently disappear. Print **every** project as a numbered
+list in your message and ask the user to reply with a number:
 
 ```
 Signed in: akhil@cloudstick.io
 
-Which project?
-  Thalirtea                            12 subtasks
-  Shopping App                         10 subtasks
-  Melusive — Multi-Portal Ecommerce      6 subtasks
-  ITS INFRA INDIA                        6 subtasks
+Which project? (reply with the number)
+
+   1. CloudHouse ERP                      2 tasks,  2 subtasks   (this repo)
+   2. Thalirtea                           4 tasks, 12 subtasks
+   3. Shopping App                        3 tasks, 10 subtasks
+   4. Melusive — Multi-Portal Ecommerce   3 tasks,  6 subtasks
+   5. ITS INFRA INDIA                     4 tasks,  6 subtasks
+   6. GST - Training System               1 task,   1 subtask
+   7. KSITL                               1 task,   1 subtask
+   8. Freight Forwarding ERP              1 task,   0 subtasks
 ```
+
+The same rule applies to the task and subtask lists in steps 3 and 4: **always print the whole
+list**, never a truncated one. Only fall back to `AskUserQuestion` when there are genuinely 4 or
+fewer choices, or for yes/no style confirmations.
+
+List every project the `tasks` call returned, in the order it returned them, including any with
+0 subtasks (say `no subtasks assigned`). If the count you print does not match
+`len(data)`, you have dropped something — print them all.
 
 If the current repo clearly matches one project, put it first and mark it `(this repo)` — but
 still let the user choose. Never pick for them.
 
 ## 3. Pick the task
 
-List the tasks under the chosen project and ask which one. Always include a **`← Back`** option
-that returns to step 2.
+Print **every** task under the chosen project as a numbered list and ask for a number. Always
+offer `0` as back.
 
 ```
 Signed in: akhil@cloudstick.io · Melusive — Multi-Portal Ecommerce
 
-Which task?
-  140  Implement New Client Requested Features    3 subtasks
-  118  New Update by Client                       2 subtasks
-   78  Client design mockups                      1 subtask
-  ←    Back to projects
+Which task? (number, or 0 to pick a different project)
+
+   1. 140  Implement New Client Requested Features    3 subtasks
+   2. 118  New Update by Client                       2 subtasks
+   3.  78  Client design mockups                      1 subtask
 ```
 
 ## 4. Pick the subtask
 
-List the subtasks under the chosen task. Include **`← Back`** (to step 3) and, when the day's
-work spans more than one, allow multi-select.
+Print **every** subtask under the chosen task, numbered. The user may reply with several numbers
+when the day's work spans more than one. `0` goes back to the task list.
 
 ```
 Signed in: akhil@cloudstick.io · Melusive → Implement New Client Requested Features
 
-Which subtask?
-  674  Create Product Detail Page
-  675  Update Shop & All Category Redirection
-  676  Add Offline Orders Section
-  ←    Back to tasks
+Which subtask? (one or more numbers, or 0 to pick a different task)
+
+   1. 674  Create Product Detail Page
+   2. 675  Update Shop & All Category Redirection
+   3. 676  Add Offline Orders Section
 ```
 
 Back must work at any point before posting — the user can change project or task, and the
