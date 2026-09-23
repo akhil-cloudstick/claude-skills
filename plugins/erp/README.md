@@ -1,10 +1,24 @@
-# erp — daily ERP work updates
+# erp
 
-Optional plugin, separate from the `cloudhouse` standards plugin. Installing `cloudhouse` does
-not install this, and this does not install `cloudhouse`.
+Post your daily work update to the Cloudhouse ERP without writing it yourself.
 
-One skill: **`/erp:eod`** — posts the day's work update, status and progress to the Cloudhouse
-ERP for the project of the repo you run it in.
+Optional and self-contained: installing this does not install the `cloudhouse` standards plugin,
+and installing that one does not install this.
+
+| | |
+|---|---|
+| `/erp:eod` | draft and post a work update, status and progress for a subtask |
+| `/erp:logout` | sign out on this machine |
+
+## Why
+
+Every day, every subtask you touched needs an update in the ERP — what was done, plus a status
+and a progress bump. It gets skipped when work is busy, and reconstructing a week later is
+guesswork.
+
+The work itself is already recorded: in your Claude Code sessions, in the files you changed, and
+sometimes in commits. This reads that, drafts the update in your own style, works out the
+progress from the subtask's own description, and posts only what you approved.
 
 ## Install
 
@@ -13,53 +27,88 @@ ERP for the project of the repo you run it in.
 /plugin install erp@cloudhouse-skills
 ```
 
-Already added the marketplace for `cloudhouse`? Then only the second line is needed. Repeat it
-on each machine you work from (office, client RDP, laptop) — nothing is shared between them
-except the repo itself.
-
-Non-interactive:
-
-```
-claude plugin install erp@cloudhouse-skills
-```
+Already added the marketplace? The second line is enough. Repeat on each machine you work
+from — office, client RDP, laptop. Nothing is shared between them.
 
 ## First run
-
-```
-py <plugin>/skills/eod/scripts/erp.py login
-```
-
-Asks only for your email and password — the ERP URL is built in
-(`https://api.cloudhousetechnologies.com`; add `--dev` for `http://localhost:8085`, or
-`--url <base>` for anything else). The session is stored in `~/.cloudhouse-eod.json`
-**on that machine only**. Credentials are never in this repo, so each
-machine and each person logs in separately. `login --update` changes account or URL.
-
-Then, inside the repo of the project you want to report on:
 
 ```
 /erp:eod
 ```
 
-It reads what was really done that day in that repo — from every Claude Code session of the day,
-not just the current chat — drafts a short bullet-point update per assigned subtask, proposes a
-status and progress change, shows all three for you to edit, and posts each request one at a time
-after you approve.
+Not signed in yet? It asks for your email, then opens a small login window where you type your
+password — hidden, and never in the chat transcript. The ERP URL is built in
+(`https://api.cloudhousetechnologies.com`), so you never type it.
 
-## Scope rules
+The session is stored in `~/.cloudhouse-eod.json` **on that machine only**, never in this repo.
+It lasts 72 hours and renews itself silently.
 
-- **One repo, one project.** Only the repo you run it in is reported. Other projects are posted
-  by running it inside their own repo.
-- **One day, one update.** The day window runs 05:00 to 05:00 by default, so past-midnight work
-  counts as the previous working day.
-- Missed a day: `py .../today.py --date 2026-09-21` reconstructs it; each day is posted on its own.
+## What happens
+
+1. **Signed in as** — every prompt carries the account, so you always know which login will write.
+2. **Pick the project** — a selectable list of everything assigned to you; more than four, and a
+   `More` option pages through the rest. Nothing is hidden.
+3. **Pick the task**, then **the subtask** — same list style, multi-select on subtasks, with
+   back options at each level. You can also type a subtask id or part of its name to jump
+   straight there.
+4. **It reads the day** — every Claude Code session of that day, not just the current chat, plus
+   files changed on disk and any commits. Scoped to the repo you ran it in, so one project's
+   work never leaks into another's update.
+5. **It drafts** — short bullet points in plain English, and a proposed status and progress.
+6. **You review** — approve, edit any of the three, or skip. **Your edit is what gets posted**,
+   word for word.
+7. **It posts** — update, then status, then progress, one request at a time, reporting each.
+   Unchanged values send nothing.
+
+## How progress is worked out
+
+From the subtask's **description**, not guessed. It reads the subtask first, so the "from"
+number is the real stored one:
+
+```
+Progress  0% → 65%   (new page ✓, View More redirect ✓, keep filters — partial → 2.5 of 3)
+```
+
+No description? It falls back to the subtask name, the current progress and what you did that
+day, and says plainly that it is estimating.
+
+It never lowers stored progress unless you say work was reverted, never proposes a number that
+contradicts the status, and never treats logged hours as progress.
+
+## Day and project boundaries
+
+- **One day, one update.** The day runs 05:00 → 05:00, so work past midnight counts as the
+  previous working day. Missed yesterday? Ask for that date — it is posted as its own update,
+  never merged into today's.
+- **One project per run.** The repo you are in decides the project. For another project, run it
+  in that project's repo.
+
+## Switching account / signing out
+
+```
+/erp:logout                   sign out on this machine
+erp.py login --update         sign in as someone else
+```
+
+Credentials live per machine and are never committed. Signing out deletes the stored email,
+password and token locally; nothing on the ERP server changes.
 
 ## Files
 
 ```
 skills/eod/SKILL.md            the workflow
-skills/eod/scripts/erp.py      ERP API client (login, tasks, update, status, progress)
+skills/eod/scripts/erp.py      ERP client — login, tasks, subtask, updates, update/status/progress
 skills/eod/scripts/today.py    collects one day of real work from sessions, disk and git
+commands/logout.md             /erp:logout
 ```
 
-Both scripts are Python 3 standard library only — no installs.
+Both scripts are Python 3 standard library only — nothing to install. They can be run directly
+if you want to check something by hand:
+
+```
+py skills/eod/scripts/erp.py whoami
+py skills/eod/scripts/erp.py tasks
+py skills/eod/scripts/today.py --date 2026-09-21
+```
+
+Only `update`, `status` and `progress` write anything; everything else is read-only.
