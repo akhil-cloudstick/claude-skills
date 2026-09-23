@@ -97,6 +97,9 @@ Verify it worked:
 `cloudhouse` should be listed as installed and enabled. Typing `/cloudhouse:` should now
 offer `backend`, `desktop-app`, `frontend`, `go-backend`, `mobile-app` and `role-permission`.
 
+> The marketplace also carries a second, optional plugin called `erp`, unrelated to the
+> standards. You do not need it and it is not installed unless you ask for it.
+
 ## Use
 
 ```

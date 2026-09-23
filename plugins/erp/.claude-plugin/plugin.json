@@ -1,0 +1,20 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
+  "name": "erp",
+  "displayName": "Cloudhouse ERP (private)",
+  "version": "0.1.0",
+  "description": "Private ERP tooling. /erp:eod posts the day's work update, status and progress to the Cloudhouse ERP for the project of the repo it is run in, drafted from what was really done that day across every Claude Code session.",
+  "author": {
+    "name": "Akhil Joshy",
+    "email": "kunjoos@cloudstick.io"
+  },
+  "license": "UNLICENSED",
+  "keywords": [
+    "erp",
+    "daily-update",
+    "eod",
+    "work-log",
+    "automation",
+    "private"
+  ]
+}

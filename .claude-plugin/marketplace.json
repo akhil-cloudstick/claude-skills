@@ -11,6 +11,11 @@
       "name": "cloudhouse",
       "source": "./plugins/cloudhouse",
       "description": "Cloudhouse engineering standards as skills (Go backend, and more)."
+    },
+    {
+      "name": "erp",
+      "source": "./plugins/erp",
+      "description": "Optional. Posts your daily work update, status and progress to the Cloudhouse ERP. Not needed for the standards skills."
     }
   ]
 }
